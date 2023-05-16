@@ -387,6 +387,10 @@ pub(crate) fn console_ui(
                     if text_edit_response.lost_focus()
                         && ui.input(|i| i.key_pressed(egui::Key::Enter))
                     {
+                        // Remove the last character, to fix WASM bug
+                        #[cfg(target_arch = "wasm32")]
+                        state.buf.pop();
+
                         if state.buf.trim().is_empty() {
                             state.scrollback.push(StyledStr::new());
                         } else {
